@@ -6,9 +6,10 @@ ENV AUDIO_FILES="*"
 ENV LANGUAGE="None"
 ENV WHISPER_MODEL="*"
 
+COPY requirements.txt ./
 COPY transcribe.py ./
 COPY convertToPDF.py ./
-COPY requirements.txt ./
+COPY templates ./
 
 RUN apt update && apt install ffmpeg -y
 
