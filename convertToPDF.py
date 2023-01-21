@@ -131,8 +131,8 @@ if __name__ == "__main__":
 
 
     # args = parser.parse_args(["--help"])
-    args = parser.parse_args("-p data.json -t 1 2 -t 2 3 -t 3 4 -t 4 5 -i output -o output -n".split()+["2. Aufzeichnung vom 20.12.2022.mp3.txt", "3. Aufzeichnung vom 21.12.2022.mp3.txt", "4. Aufzeichnung vom 11.01.2023.mp3.txt", "5. Aufzeichnung vom 12.01.2023.mp3.txt"])
-    # args = parser.parse_args()
+    # args = parser.parse_args("-p data.json -t 1 2 -t 2 3 -t 3 4 -t 4 5 -i output -o output -n".split()+["2. Aufzeichnung vom 20.12.2022.mp3.txt", "3. Aufzeichnung vom 21.12.2022.mp3.txt", "4. Aufzeichnung vom 11.01.2023.mp3.txt", "5. Aufzeichnung vom 12.01.2023.mp3.txt"])
+    args = parser.parse_args()
 
 
     # Check if input and output folder exist
