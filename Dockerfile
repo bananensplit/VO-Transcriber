@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.10
 
 WORKDIR /usr/src/app
 
@@ -7,6 +7,7 @@ ENV LANGUAGE="None"
 ENV WHISPER_MODEL="*"
 
 COPY transcribe.py ./
+COPY convertToPDF.py ./
 COPY requirements.txt ./
 
 RUN apt update && apt install ffmpeg -y
