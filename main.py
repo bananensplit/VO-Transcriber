@@ -5,8 +5,7 @@ from datetime import datetime
 
 from convertToPDF import convert_to_PDF_vo_data
 from downloadVo import download_only_audio, get_all_vo_data
-from transcribe import (generate_srt, generate_txt, generate_vtt,
-                        transcribe_file)
+from transcribe import generate_srt, generate_txt, generate_vtt, transcribe_file
 
 
 def download_vo(vo_data: str, output_file: str):
@@ -102,17 +101,15 @@ def generate_transcribtions_vo(
 
 
 def main(args):
-
     all_vo_data = get_all_vo_data(args.data_path, args.data_link)
-    logger.debug("All Vos found: \n%s", "\n".join([20 * ' ' + vo["mediapackage"]["title"] for vo in all_vo_data]))
+    logger.debug("All Vos found: \n%s", "\n".join([20 * " " + vo["mediapackage"]["title"] for vo in all_vo_data]))
 
-    if args.transcribe_VOs is None or len(args.transcribe_VOs) == 0:
+    if args.vos is None or len(args.vos) == 0:
         logger.error("No VOs to transcribe given! Exiting")
         return
 
-    vos_to_transcribe = [vo for vo in all_vo_data if vo["mediapackage"]["title"] in args.transcribe_VOs]
-    logger.info("VOs to be transcribed: \n%s", "\n".join([20 * ' ' + vo["mediapackage"]["title"] for vo in vos_to_transcribe]))
-
+    vos_to_transcribe = [vo for vo in all_vo_data if vo["mediapackage"]["title"] in args.vos]
+    logger.info("VOs to be transcribed: \n%s", "\n".join([20 * " " + vo["mediapackage"]["title"] for vo in vos_to_transcribe]))
 
     # Download VOs
     logger.info("Downloading VOs")
@@ -131,7 +128,6 @@ def main(args):
 
     logger.info("Finished downloading VOs")
 
-
     # Transcribe VOs
     logger.info("Transcribing VOs")
     logger.debug("Creating output folder for VO-transcriptions")
@@ -147,6 +143,9 @@ def main(args):
             audio_path=audio_path,
             output_folder=transcription_output_folder,
             vo_data=vo_data,
+            language=args.language,
+            model_name=args.model_name,
+            verbose=args.verbose,
             txt=args.txt,
             vtt=args.vtt,
             srt=args.srt,
@@ -166,7 +165,7 @@ if __name__ == "__main__":
     vo_data_links = parser.add_mutually_exclusive_group()
     vo_data_links.add_argument("--data-path", "-p", type=str, default=None, help="path to the file where the VO-data is stored, this path is not influenced by the -i/--input-folder argument")
     vo_data_links.add_argument("--data-link", "-k", type=str, default=None, help="link to the VO-Data of u:space")
-    parser.add_argument("-vos", "--transcribe-VOs", action="append", type=str, help="Titels of the VOs which shall be transcribed. If this argument is not set, no VOs will be transcribed.")
+    parser.add_argument("--vos", action="append", type=str, help="Titels of the VOs which shall be transcribed. If this argument is not set, no VOs will be transcribed.")
 
     # Transcribe options
     parser.add_argument("--model-name", "-m", type=str, default="tiny", help="which whisper model shall be used for transcribing")

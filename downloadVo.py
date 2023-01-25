@@ -50,7 +50,7 @@ def get_all_vo_data(path=None, link=None):
     :param link:    Link to the file containing the VO-Data (is mutually exclusive with path)
     """
     if path is not None:
-        logger.info("Trying to load VO-Data from file: '%s'", path)
+        logger.info("Trying to load VO-Data from file: %s", path)
         if not os.path.isfile(path):
             logger.error("VO-data file is not a file or doesn't exist: ", path)
 
