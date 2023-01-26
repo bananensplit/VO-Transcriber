@@ -1,12 +1,9 @@
-import argparse
-import json
 import logging
 import os
 from datetime import datetime, timedelta
 
 import jinja2
 import pdfkit
-import requests
 
 
 logger = logging.getLogger("VOs-Transcribe")
@@ -107,7 +104,7 @@ def convert_to_PDF(transcription, output_file, page_numbers=False):
     }
     if page_numbers:
         options["footer-right"] = "[page] / [topage]"
-    logger.debug("  Options:       " + str(options))
+    logger.debug("  Options:       %s", str(options))
 
     pdfkit.from_string(output_html, output_file, options=options)
     logger.info("Generated PDF for '%s' at '%s'", os.path.basename(output_file), output_file)

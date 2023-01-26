@@ -52,7 +52,7 @@ def get_all_vo_data(path=None, link=None):
     if path is not None:
         logger.info("Trying to load VO-Data from file: %s", path)
         if not os.path.isfile(path):
-            logger.error("VO-data file is not a file or doesn't exist: ", path)
+            logger.error("VO-data file is not a file or doesn't exist: %s", path)
 
         try:
             with open(path, "r", encoding="UTF-8") as f:
@@ -64,7 +64,7 @@ def get_all_vo_data(path=None, link=None):
     if link is not None:
         logger.info("Trying to load VO-data from link: %s", link)
         try:
-            response = requests.get(link)
+            response = requests.get(link, timeout=5)
             vo_data = response.json()
             return vo_data["search-results"]["result"]
         except Exception as e:

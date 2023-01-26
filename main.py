@@ -14,7 +14,7 @@ def download_vo(vo_data: str, output_file: str):
     :param vo_data:         The vo_data to download
     :param output_file:     The output file to save the audio track to
     """
-    logger.info("Downloading " + vo_data["mediapackage"]["title"])
+    logger.info("Downloading %s", vo_data["mediapackage"]["title"])
     tracks = vo_data["mediapackage"]["media"]["track"]
     audio_tracks = [track for track in tracks if track["mimetype"].startswith("audio")]
 
@@ -81,8 +81,8 @@ def generate_transcribtions_vo(
         mp4_link = [track for track in vo_data["mediapackage"]["media"]["track"] if track["mimetype"].startswith("video/mp4")]
         mp4_link = mp4_link[0]["url"] if len(mp4_link) > 0 else ""
         convert_to_PDF_vo_data(
-            output_path=path,
-            vo_titel=vo_data["mediapackage"]["vo_titel"],
+            output_file=path,
+            vo_title=vo_data["mediapackage"]["title"],
             autor=vo_data["mediapackage"]["creators"]["creator"],
             beitragende=vo_data["mediapackage"]["contributors"]["contributor"],
             length=timedelta(milliseconds=vo_data["mediapackage"]["duration"]),
