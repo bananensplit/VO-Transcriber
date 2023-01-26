@@ -150,28 +150,7 @@ def main(args):
     logger.info("Finished transcribing VOs")
 
 
-def test():
-    with open("output/8. Aufzeichnung vom 25.01.2023.txt", "r", encoding="UTF-8") as f:
-        transcription = f.read()
-
-    convert_to_PDF_vo_data(
-        "output/8. Aufzeichnung vom 25.01.2023.pdf",
-        "8. Aufzeichnung vom 25.01.2023",
-        "Konrad Fiedler",
-        "Konrad Fiedler,Martin Hepner,Brigitte Gottsberger,Denise Hohenbühel",
-        timedelta(milliseconds=6617440),
-        datetime.strptime("2023-01-25T15:39:25Z", "%Y-%m-%dT%H:%M:%SZ"),
-        "300718.1 VO Statistik in der Biologie (2022W)",
-        "https://media.ustream.univie.ac.at/u_stream/engage-player/d549bd58-bad1-4e2f-9f51-63580740585b/cdee00d4-0eea-4041-a312-12b3acdb8c60/8226fc00-d34d-49f2-9cf1-65ba605c0850.mp4",
-        transcription,
-        True,
-    )
-
-
 if __name__ == "__main__":
-    test()
-    exit()
-
     # Setup argparse
     parser = argparse.ArgumentParser(description="Transcribe audio files to text")
 
