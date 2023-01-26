@@ -37,7 +37,7 @@ def download_vo(vo_data: str, output_file: str):
 
 def generate_transcribtions_vo(
     audio_path: str,
-    vo_data: str,
+    vo_data,
     output_folder: str,
     language: str = None,
     model_name: str = "tiny",
@@ -77,6 +77,9 @@ def generate_transcribtions_vo(
     if pdf:
         path = os.path.join(output_folder, vo_data["mediapackage"]["title"] + ".pdf")
         transcription = generate_txt(segments)
+        # TODO: Find a better way to get the mp4 link (this don't checks for quality and might return different values for different VOs)
+        mp4_link = [track for track in vo_data["mediapackage"]["media"]["track"] if track["mimetype"].startswith("video/mp4")]
+        mp4_link = mp4_link[0]["url"] if len(mp4_link) > 0 else ""
         convert_to_PDF_vo_data(
             output_path=path,
             vo_titel=vo_data["mediapackage"]["vo_titel"],
@@ -85,7 +88,7 @@ def generate_transcribtions_vo(
             length=timedelta(milliseconds=vo_data["mediapackage"]["duration"]),
             recorded_on=datetime.strptime(vo_data["mediapackage"]["start"], "%Y-%m-%dT%H:%M:%SZ"),
             series_name=vo_data["mediapackage"]["seriestitle"],
-            link=vo_data["mediapackage"]["media"]["track"][0]["url"],
+            link=mp4_link,
             transcription=transcription,
         )
     logger.info("Finished transcribing '%s'", audio_path)
@@ -147,7 +150,28 @@ def main(args):
     logger.info("Finished transcribing VOs")
 
 
+def test():
+    with open("output/8. Aufzeichnung vom 25.01.2023.txt", "r", encoding="UTF-8") as f:
+        transcription = f.read()
+
+    convert_to_PDF_vo_data(
+        "output/8. Aufzeichnung vom 25.01.2023.pdf",
+        "8. Aufzeichnung vom 25.01.2023",
+        "Konrad Fiedler",
+        "Konrad Fiedler,Martin Hepner,Brigitte Gottsberger,Denise Hohenbühel",
+        timedelta(milliseconds=6617440),
+        datetime.strptime("2023-01-25T15:39:25Z", "%Y-%m-%dT%H:%M:%SZ"),
+        "300718.1 VO Statistik in der Biologie (2022W)",
+        "https://media.ustream.univie.ac.at/u_stream/engage-player/d549bd58-bad1-4e2f-9f51-63580740585b/cdee00d4-0eea-4041-a312-12b3acdb8c60/8226fc00-d34d-49f2-9cf1-65ba605c0850.mp4",
+        transcription,
+        True,
+    )
+
+
 if __name__ == "__main__":
+    test()
+    exit()
+
     # Setup argparse
     parser = argparse.ArgumentParser(description="Transcribe audio files to text")
 
