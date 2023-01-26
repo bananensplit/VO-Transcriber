@@ -1,7 +1,7 @@
 import argparse
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from convertToPDF import convert_to_PDF_vo_data
 from downloadVo import download_only_audio, get_all_vo_data
@@ -75,15 +75,6 @@ def generate_transcribtions_vo(
     if srt:
         generate_srt(segments, os.path.join(output_folder, vo_data["mediapackage"]["title"] + ".srt"))
     if pdf:
-        vo_data = {
-            "vo_titel": vo_data["mediapackage"]["title"],
-            "autor": vo_data["mediapackage"]["creators"]["creator"],
-            "beitragende": vo_data["mediapackage"]["contributors"]["contributor"],
-            "length": str(datetime.timedelta(milliseconds=vo_data["mediapackage"]["duration"])),
-            "recorded_on": datetime.strptime(vo_data["mediapackage"]["start"], "%Y-%m-%dT%H:%M:%SZ"),
-            "series_name": vo_data["mediapackage"]["seriestitle"],
-            "link": vo_data["mediapackage"]["media"]["track"][0]["url"],
-        }
         path = os.path.join(output_folder, vo_data["mediapackage"]["title"] + ".pdf")
         transcription = generate_txt(segments)
         convert_to_PDF_vo_data(
@@ -91,8 +82,8 @@ def generate_transcribtions_vo(
             vo_titel=vo_data["mediapackage"]["vo_titel"],
             autor=vo_data["mediapackage"]["creators"]["creator"],
             beitragende=vo_data["mediapackage"]["contributors"]["contributor"],
-            length=vo_data["mediapackage"]["length"],
-            recorded_on=vo_data["mediapackage"]["start"],
+            length=timedelta(milliseconds=vo_data["mediapackage"]["duration"]),
+            recorded_on=datetime.strptime(vo_data["mediapackage"]["start"], "%Y-%m-%dT%H:%M:%SZ"),
             series_name=vo_data["mediapackage"]["seriestitle"],
             link=vo_data["mediapackage"]["media"]["track"][0]["url"],
             transcription=transcription,
@@ -130,9 +121,8 @@ def main(args):
 
     # Transcribe VOs
     logger.info("Transcribing VOs")
-    logger.debug("Creating output folder for VO-transcriptions")
     transcription_output_folder = os.path.join(args.output_folder, "transcriptions")
-    logger.debug("Creating output folder for VO-transcriptions: '%s'", transcription_output_folder)
+    logger.debug("Created output folder for VO-transcriptions: '%s'", transcription_output_folder)
 
     if not os.path.isdir(transcription_output_folder):
         os.mkdir(transcription_output_folder)

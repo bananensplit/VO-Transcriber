@@ -61,7 +61,7 @@ def generate_vtt(segments, output_file=None):
     result = "\n\n".join(out)
     if output_file:
         with open(output_file, 'w') as f:
-            f.write()
+            f.write(result)
             logger.info("Generated output VTT %s", output_file)
 
     logger.debug("Finished generating VTT")
