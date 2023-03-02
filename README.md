@@ -11,7 +11,7 @@
 
 This is a **transcriber** that uses [Whisper][whisper-url] (by [OpenAI][openai-url]) to **transcribe recorded lectures** from the **TU Wien** and **Uni Wien**. It is a **docker container** that can be run on any machine that supports docker and has it installed.
 
-I noticed that some of the lectures at TU Wien and Uni Wien are have poor or even no scripts available. This is a problem for students that want to learn from the lectures but don't have the time to watch them. This project aims to help solve this problem by providing transcripts for the lectures. Of course, this is not a perfect solution, but used in combination with some new AI-Tools like [ChatGPT][chatgpt-url] or the [Bing Chat Bot][bing-chat-url], it can help students to learn from the lectures.
+I noticed that some of the lectures at TU Wien and Uni Wien have poor or even no scripts available. This is a problem for students that want to learn from the lectures but don't have the time to watch them. This project aims to help solve this problem by providing transcripts for the lectures. Of course, this is not a perfect solution, but used in combination with some new AI-Tools like [ChatGPT][chatgpt-url] or the [Bing Chat Bot][bing-chat-url], it can help students to easier consume lectures and use this scripts as a _lookup place_.
 
 ## Installation
 
