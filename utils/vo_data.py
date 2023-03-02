@@ -8,7 +8,7 @@ import requests
 from models.VoDataModels import VoData
 
 
-logger = logging.getLogger("VOs-Transcribe")
+logger = logging.getLogger("VO-Transcriber")
 
 
 def get_all_vo_data(path=None, link=None):

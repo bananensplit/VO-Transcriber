@@ -3,7 +3,7 @@ import logging
 import youtube_dl as ydl
 
 
-logger = logging.getLogger("VOs-Transcribe")
+logger = logging.getLogger("VO-Transcriber")
 
 
 def download_only_audio(url, save_path):

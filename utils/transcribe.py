@@ -3,7 +3,7 @@ import logging
 import whisper
 
 
-logger = logging.getLogger("VOs-Transcribe")
+logger = logging.getLogger("VO-Transcriber")
 
 
 def transcribe_file(input_file, language=None, model_name="small", verbose=False):

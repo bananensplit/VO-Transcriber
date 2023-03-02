@@ -220,9 +220,9 @@ if __name__ == "__main__":
         parser.error("Output folder does not exist: " + args.output_folder)
 
     # Setup logging
-    logger = logging.getLogger("VOs-Transcribe")
+    logger = logging.getLogger("VO-Transcriber")
     logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler(os.path.join(args.output_folder, "VOs-Transcribe.log"))
+    fh = logging.FileHandler(os.path.join(args.output_folder, "VO-Transcriber.log"))
     ch = logging.StreamHandler()
     formatter = logging.Formatter(fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
     fh.setFormatter(formatter)

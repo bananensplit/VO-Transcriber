@@ -7,7 +7,7 @@ import jinja2
 import pdfkit
 
 
-logger = logging.getLogger("VOs-Transcribe")
+logger = logging.getLogger("VO-Transcriber")
 
 
 def convert_to_PDF_vo_data(

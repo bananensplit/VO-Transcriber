@@ -2,7 +2,7 @@ import logging
 from datetime import timedelta
 
 
-logger = logging.getLogger("VOs-Transcribe")
+logger = logging.getLogger("VO-Transcriber")
 
 
 def generate_txt(segments, output_file=None):
