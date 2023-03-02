@@ -7,7 +7,7 @@ COPY main.py ./
 COPY downloadVo.py ./
 COPY convertToPDF.py ./
 COPY transcribe.py ./
-COPY templates ./
+COPY templates/ ./templates
 
 RUN apt update && \
     apt install ffmpeg -y && \
