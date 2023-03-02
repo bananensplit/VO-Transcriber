@@ -9,9 +9,9 @@
 
 ## A transcriber for VOs (Vorlesungen / Lectures) for Students of TU Wien and Uni Wien
 
-This is a transcriber that uses Whisper (by OpenAI) to transcribe recorded lectures from the TU Wien and Uni Wien. It is a docker container that can be run on any machine that supports docker and has it installed.
+This is a **transcriber** that uses [Whisper][whisper-url] (by [OpenAI][openai-url]) to **transcribe recorded lectures** from the **TU Wien** and **Uni Wien**. It is a **docker container** that can be run on any machine that supports docker and has it installed.
 
-I noticed that some of the lectures at TU Wien and Uni Wien are have poor or even no scripts available. This is a problem for students that want to learn from the lectures but don't have the time to watch them. This project aims to help solve this problem by providing transcripts for the lectures. Of course, this is not a perfect solution, but used in combination with some new AI-Tools like ChatGPT or the Bing Chat Bot, it can help students to learn from the lectures.
+I noticed that some of the lectures at TU Wien and Uni Wien are have poor or even no scripts available. This is a problem for students that want to learn from the lectures but don't have the time to watch them. This project aims to help solve this problem by providing transcripts for the lectures. Of course, this is not a perfect solution, but used in combination with some new AI-Tools like [ChatGPT][chatgpt-url] or the [Bing Chat Bot][bing-chat-url], it can help students to learn from the lectures.
 
 ## Installation
 
@@ -245,6 +245,9 @@ Jeremiasz Zrolka - jeremiasz.zrolka@gmail.com
 [docker-install-url]: https://docs.docker.com/get-docker/
 [python-url]: https://www.python.org/downloads/release/python-3100/
 [virtualenv-url]: https://virtualenv.pypa.io/en/latest/installation.html
+[openai-url]: https://openai.com/
+[chatgpt-url]: https://openai.com/blog/chatgpt
+[bing-chat-url]: https://www.bing.com/new
 [whisper-url]: https://openai.com/research/whisper
 [whisper-github-url]: https://github.com/openai/whisper
 [whisper-github-models-url]: https://github.com/openai/whisper#available-models-and-languages
