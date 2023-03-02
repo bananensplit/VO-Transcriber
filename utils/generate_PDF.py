@@ -114,21 +114,24 @@ def convert_to_PDF(transcription, output_file, page_numbers=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Converts a transcription to a PDF")
 
-    parser.add_argument("--with-vo-data", action='store_true', help="indicates that the transcription is part of a VO")
+    parser.add_argument("--with-vo-data", action="store_true", help="indicates that the transcription is part of a VO")
     parser.add_argument("--autor", type=str, help="Autor of the VO")
     parser.add_argument("--beitragende", type=str, help="Contributors of the VO")
     parser.add_argument("--length", type=int, help="Length of the VO (as milliseconds)")
-    parser.add_argument("--recorded-on", type=str, help="Date and time the VO was recorded in format: YYYY-MM-DDTHH:MM:SSZ' (example: 2020-01-01T12:00:00Z)")
+    parser.add_argument(
+        "--recorded-on",
+        type=str,
+        help="Date and time the VO was recorded in format: YYYY-MM-DDTHH:MM:SS+-TZ' (example: 2020-01-01T12:00:00+01:00)",
+    )
     parser.add_argument("--series-name", type=str, help="Name of the series the VO is part of")
     parser.add_argument("--link", help="Link to the VO (is intended to be a link to the raw MP4 file)")
 
-    #   %Y-%m-%dT%H:%M:%SZ
+    #   %Y-%m-%dT%H:%M:%S%Z
 
     parser.add_argument("--vo-title", type=str, required=True, help="Title of the VO")
     parser.add_argument("--transcription", type=str, required=True, help="File path to the transcription of the VO")
-    parser.add_argument("--page-numbers", action='store_true', help="Whether to add page numbers to the PDF")
+    parser.add_argument("--page-numbers", action="store_true", help="Whether to add page numbers to the PDF")
     parser.add_argument("out_path", type=str, help="Path to the output file")
-
 
     args = parser.parse_args()
 
@@ -158,7 +161,7 @@ if __name__ == "__main__":
             autor=args.autor,
             beitragende=args.beitragende,
             length=timedelta(milliseconds=int(args.length)),
-            recorded_on=datetime.strptime(args.recorded_on, "%Y-%m-%dT%H:%M:%SZ"),
+            recorded_on=datetime.strptime(args.recorded_on, "%Y-%m-%dT%H:%M:%S%Z"),
             series_name=args.series_name,
             link=args.link,
             transcription=transcription,
@@ -167,7 +170,7 @@ if __name__ == "__main__":
     else:
         with open(args.transcription, "r", encoding="UTF-8") as f:
             transcription = f.read()
-        
+
         convert_to_PDF(
             transcription=transcription,
             output_file=args.out_path,

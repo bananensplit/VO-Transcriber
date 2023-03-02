@@ -1,43 +1,42 @@
 import argparse
+from datetime import datetime
 import logging
 import os
-from datetime import datetime, timedelta
 
-from convertToPDF import convert_to_PDF_vo_data
-from downloadVo import download_only_audio, get_all_vo_data
-from transcribe import generate_srt, generate_txt, generate_vtt, transcribe_file
+from models.VoDataModels import VoData
+from utils.transcribe import transcribe_file
+from utils.download import download_only_audio
+from utils.generate_PDF import convert_to_PDF_vo_data
+from utils.generate_files import generate_srt, generate_txt, generate_vtt
+from utils.vo_data import get_all_vo_data, parse_vo_data_tu, parse_vo_data_uni_wien
 
 
-def download_vo(vo_data: str, output_file: str):
+def download_vo(vo_data: VoData, output_file: str):
     """
     Downloads the audio track of the given vo_data to the given output_file
     :param vo_data:         The vo_data to download
     :param output_file:     The output file to save the audio track to
     """
-    logger.info("Downloading %s", vo_data["mediapackage"]["title"])
-    tracks = vo_data["mediapackage"]["media"]["track"]
-    audio_tracks = [track for track in tracks if track["mimetype"].startswith("audio")]
+    logger.info("Downloading %s", vo_data.vo_title)
 
-    if len(audio_tracks) == 0:
-        url = tracks[0]["url"]
+    if vo_data.vo_mp3_link is not None:
         logger.warning(
             "No audio track found for '%s' found!\nDownloading whole video and extracting audio track (will take more time)",
-            vo_data["mediapackage"]["title"],
+            vo_data.vo_title,
         )
-        logger.debug("Downloading video for '%s' from '%s'", vo_data["mediapackage"]["title"], url)
-        download_only_audio(url, output_file)
-        logger.info("Downloaded audio track for '%s' to '%s'", vo_data["mediapackage"]["title"], output_file)
-    else:
-        url = audio_tracks[0]["url"]
-        logger.info("Found audiotrack for '%s'", vo_data["mediapackage"]["title"])
-        logger.debug("Downloading audio track for '%s' from '%s'", vo_data["mediapackage"]["title"], url)
-        download_only_audio(url, output_file)
-        logger.info("Downloaded audio track for '%s' to '%s'", vo_data["mediapackage"]["title"], output_file)
+        logger.debug("Downloading video for '%s' from '%s'", vo_data.vo_title, vo_data.vo_mp3_link)
+        download_only_audio(vo_data.vo_mp3_link, output_file)
+        logger.info("Downloaded video and extracted audio track for '%s' to '%s'", vo_data.vo_title, output_file)
+    elif vo_data.vo_mp4_link is not None:
+        logger.info("Found audiotrack for '%s'", vo_data.vo_title)
+        logger.debug("Downloading audio track for '%s' from '%s'", vo_data.vo_title, vo_data.vo_mp4_link)
+        download_only_audio(vo_data.vo_mp4_link, output_file)
+        logger.info("Downloaded audio track for '%s' to '%s'", vo_data.vo_title, output_file)
 
 
 def generate_transcribtions_vo(
     audio_path: str,
-    vo_data,
+    vo_data: VoData,
     output_folder: str,
     language: str = None,
     model_name: str = "tiny",
@@ -46,6 +45,7 @@ def generate_transcribtions_vo(
     vtt: bool = False,
     srt: bool = False,
     pdf: bool = False,
+    pdf_page_numbers: bool = False,
 ):
     """
     Transcribes the audio file at the given path and generates the output files.
@@ -69,41 +69,51 @@ def generate_transcribtions_vo(
     )
 
     if txt:
-        generate_txt(segments, os.path.join(output_folder, vo_data["mediapackage"]["title"] + ".txt"))
+        generate_txt(segments, os.path.join(output_folder, vo_data.vo_title + ".txt"))
     if vtt:
-        generate_vtt(segments, os.path.join(output_folder, vo_data["mediapackage"]["title"] + ".vtt"))
+        generate_vtt(segments, os.path.join(output_folder, vo_data.vo_title + ".vtt"))
     if srt:
-        generate_srt(segments, os.path.join(output_folder, vo_data["mediapackage"]["title"] + ".srt"))
+        generate_srt(segments, os.path.join(output_folder, vo_data.vo_title + ".srt"))
     if pdf:
-        path = os.path.join(output_folder, vo_data["mediapackage"]["title"] + ".pdf")
+        path = os.path.join(output_folder, vo_data.vo_title + ".pdf")
         transcription = generate_txt(segments)
-        # TODO: Find a better way to get the mp4 link (this don't checks for quality and might return different values for different VOs)
-        mp4_link = [track for track in vo_data["mediapackage"]["media"]["track"] if track["mimetype"].startswith("video/mp4")]
-        mp4_link = mp4_link[0]["url"] if len(mp4_link) > 0 else ""
         convert_to_PDF_vo_data(
             output_file=path,
-            vo_title=vo_data["mediapackage"]["title"],
-            autor=vo_data["mediapackage"]["creators"]["creator"],
-            beitragende=vo_data["mediapackage"]["contributors"]["contributor"],
-            length=timedelta(milliseconds=vo_data["mediapackage"]["duration"]),
-            recorded_on=datetime.strptime(vo_data["mediapackage"]["start"], "%Y-%m-%dT%H:%M:%SZ"),
-            series_name=vo_data["mediapackage"]["seriestitle"],
-            link=mp4_link,
+            vo_title=vo_data.vo_title,
+            autor=vo_data.author,
+            beitragende=vo_data.contributors,
+            length=vo_data.duration,
+            recorded_on=vo_data.recorded_on,
+            series_name=vo_data.series_title,
+            link=vo_data.vo_mp4_link,
             transcription=transcription,
+            page_numbers=pdf_page_numbers,
         )
     logger.info("Finished transcribing '%s'", audio_path)
 
 
 def main(args):
+    # Getting VO-Data
     all_vo_data = get_all_vo_data(args.data_path, args.data_link)
-    logger.debug("All Vos found: \n%s", "\n".join([20 * " " + vo["mediapackage"]["title"] for vo in all_vo_data]))
+    if all_vo_data is None:
+        logger.error("Could not get VO-Data! Exiting")
+        return
 
+    # Parseing VO-Data
+    if args.uni == "uw":
+        all_vo_data = parse_vo_data_uni_wien(all_vo_data)
+    elif args.uni == "tu":
+        all_vo_data = parse_vo_data_tu(all_vo_data)
+
+    logger.debug("All Vos found: \n%s", "\n".join([20 * " " + vo.vo_title for vo in all_vo_data]))
+
+    # Getting VOs to transcribe
     if args.vos is None or len(args.vos) == 0:
         logger.error("No VOs to transcribe given! Exiting")
         return
 
-    vos_to_transcribe = [vo for vo in all_vo_data if vo["mediapackage"]["title"] in args.vos]
-    logger.info("VOs to be transcribed: \n%s", "\n".join([20 * " " + vo["mediapackage"]["title"] for vo in vos_to_transcribe]))
+    vos_to_transcribe = [vo for vo in all_vo_data if vo.vo_title in args.vos]
+    logger.info("VOs to be transcribed: \n%s", "\n".join([20 * " " + vo.vo_title for vo in vos_to_transcribe]))
 
     # Download VOs
     logger.info("Downloading VOs")
@@ -113,7 +123,7 @@ def main(args):
     if not os.path.isdir(audios_output_folder):
         os.mkdir(audios_output_folder)
 
-    paths_to_audios = [os.path.join(audios_output_folder, vo["mediapackage"]["title"] + ".mp3") for vo in vos_to_transcribe]
+    paths_to_audios = [os.path.join(audios_output_folder, vo.vo_title + ".mp3") for vo in vos_to_transcribe]
     for vo_data, path in zip(vos_to_transcribe, paths_to_audios):
         start = datetime.now()
         download_vo(vo_data, path)
@@ -142,7 +152,8 @@ def main(args):
             txt=args.txt,
             vtt=args.vtt,
             srt=args.srt,
-            pdf=args.pdf,
+            pdf=args.pdf or args.pdf_no_num,
+            pdf_page_numbers=args.pdf,
         )
         end = datetime.now()
         logger.info("Transcribing took %s", str(end - start))
@@ -154,32 +165,55 @@ if __name__ == "__main__":
     # Setup argparse
     parser = argparse.ArgumentParser(description="Transcribe audio files to text")
 
+    # Data format
+    parser.add_argument("--uni", choices=["uw", "tu"], required=True, help="Which university is the data from")
+
     # Download data
     vo_data_links = parser.add_mutually_exclusive_group()
-    vo_data_links.add_argument("--data-path", "-p", type=str, default=None, help="path to the file where the VO-data is stored, this path is not influenced by the -i/--input-folder argument")
+    vo_data_links.add_argument(
+        "--data-path",
+        "-p",
+        type=str,
+        default=None,
+        help="path to the file where the VO-data is stored, this path is not influenced by the -i/--input-folder argument",
+    )
     vo_data_links.add_argument("--data-link", "-k", type=str, default=None, help="link to the VO-Data of u:space")
-    parser.add_argument("--vos", action="append", type=str, help="Titels of the VOs which shall be transcribed. If this argument is not set, no VOs will be transcribed.")
+    parser.add_argument(
+        "--vos",
+        action="append",
+        type=str,
+        help="Titels of the VOs which shall be transcribed. If this argument is not set, no VOs will be transcribed.",
+    )
 
     # Transcribe options
     parser.add_argument("--model-name", "-m", type=str, default="tiny", help="which whisper model shall be used for transcribing")
-    parser.add_argument("--language", "-l", type=str, default="None", help="language which shall be used for transcribing")
+    parser.add_argument(
+        "--language",
+        "-l",
+        type=str,
+        default="de",
+        help="language which shall be used for transcribing (defaults to 'de' for german)",
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="does print the ouput of the transcribtion to the console")
     parser.add_argument("--txt", action="store_true", help="if set the audios will be transcibed to txt")
     parser.add_argument("--vtt", action="store_true", help="if set the audios will be transcibed to vtt")
     parser.add_argument("--srt", action="store_true", help="if set the audios will be transcibed to srt")
 
     # PDF options
-    parser.add_argument("--pdf", action="store_true", help="if set the audios will be transcibed to pdf")
-    parser.add_argument("--page-numbers", "-n", action="store_true", help="if set page numbers will be added to the pdfs (-pdf has to be set)")
-    # parser.add_argument("--add-info", "-i", action="store_true", help="if set the pdfs will contain information about the VOs (-pdf has to be set)")
+    pdf_options = parser.add_mutually_exclusive_group()
+    pdf_options.add_argument("--pdf", action="store_true", help="if set the audios will be transcibed to pdfs with page numbers")
+    pdf_options.add_argument(
+        "--pdf-no-num", action="store_true", help="if set the audios will be transcibed to pdfs without page numbers"
+    )
 
     # Output options
-    parser.add_argument("-o", "--output_folder", default="output", help="outputfolder where every ouput (audios and transcriptions) shall be stored")
+    parser.add_argument(
+        "-o",
+        "--output_folder",
+        default="output",
+        help="outputfolder where every ouput (audios and transcriptions) shall be stored",
+    )
 
-    # args = parser.parse_args(["--help"])
-    # args = parser.parse_args(
-        # ["-p", "data.json", "-vos", "2. Aufzeichnung vom 20.12.2022", "-o", "output", "-m", "tiny", "-l", "de", "-v", "--pdf", "--page-numbers"]
-    # )
     args = parser.parse_args()
 
     if not os.path.isdir(args.output_folder):

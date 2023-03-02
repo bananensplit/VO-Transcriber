@@ -1,22 +1,8 @@
 import logging
-import os
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-import whisper
 
 logger = logging.getLogger("VOs-Transcribe")
-
-
-def transcribe_file(input_file, language=None, model_name="small", verbose=False):
-    model = whisper.load_model(model_name)
-
-    options = {
-        "fp16": False,
-        "language": language,
-    }
-
-    result = model.transcribe(audio=input_file, verbose=verbose, **options)
-    return result["segments"]
 
 
 def generate_txt(segments, output_file=None):
@@ -24,7 +10,7 @@ def generate_txt(segments, output_file=None):
     out = "\n".join(segment["text"].strip() for segment in segments)
 
     if output_file:
-        with open(output_file, 'w') as f:
+        with open(output_file, "w", encoding="UTF-8") as f:
             f.write(out)
             logger.info("Generated output TXT %s" + output_file)
 
@@ -42,7 +28,7 @@ def generate_srt(segments, output_file=None):
 
     result = "\n\n".join(out)
     if output_file:
-        with open(output_file, 'w') as f:
+        with open(output_file, "w", encoding="UTF-8") as f:
             f.write(result)
             logger.info("Generated output SRT %s", output_file)
 
@@ -60,28 +46,9 @@ def generate_vtt(segments, output_file=None):
 
     result = "\n\n".join(out)
     if output_file:
-        with open(output_file, 'w') as f:
+        with open(output_file, "w", encoding="UTF-8") as f:
             f.write(result)
             logger.info("Generated output VTT %s", output_file)
 
     logger.debug("Finished generating VTT")
     return result
-
-
-def transcribe_all(audio_files: list, output_folder, language=None, model_name="small", verbose=False):
-    for audio_file in audio_files:
-        start = datetime.now()
-        logger.info("Transcribing " + audio_file)
-
-        output_file_txt = os.path.join(output_folder, os.path.basename(audio_file) + ".txt")
-        output_file_srt = os.path.join(output_folder, os.path.basename(audio_file) + ".srt")
-        output_file_vtt = os.path.join(output_folder, os.path.basename(audio_file) + ".vtt")
-        
-        result = transcribe_file(input_file=audio_file, output_folder=output_folder, language=language, model_name=model_name, verbose=verbose)
-        generate_txt(result, output_file_txt)
-        generate_srt(result, output_file_srt)
-        generate_vtt(result, output_file_vtt)
-        
-        logger.info("Finished transcribing " + audio_file)
-        end = datetime.now()
-        logger.info("Transcribing took " + str(end - start))
