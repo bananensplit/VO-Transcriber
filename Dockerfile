@@ -4,10 +4,9 @@ WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 COPY main.py ./
-COPY downloadVo.py ./
-COPY convertToPDF.py ./
-COPY transcribe.py ./
-COPY templates/ ./templates
+COPY utils ./utils
+COPY templates ./templates
+COPY models ./models
 
 RUN apt update && \
     apt install ffmpeg -y && \
