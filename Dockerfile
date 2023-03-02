@@ -16,7 +16,7 @@ RUN apt update && \
 
 # This is for ARM64
 RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_arm64.deb && \
-    apt install -y ./wkhtmltox_0.12.6-1.buster_amd64.deb && \
+    apt install -y ./wkhtmltox_0.12.6-1.buster_arm64.deb && \
     apt install -y openssl build-essential libssl-dev libxrender-dev git-core libx11-dev libxext-dev libfontconfig1-dev libfreetype6-dev fontconfig
 
 # This is for AMD64
