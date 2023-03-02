@@ -152,8 +152,8 @@ def main(args):
             txt=args.txt,
             vtt=args.vtt,
             srt=args.srt,
-            pdf=args.pdf or args.pdf_no_num,
-            pdf_page_numbers=args.pdf,
+            pdf=args.pdf,
+            pdf_page_numbers=True,
         )
         end = datetime.now()
         logger.info("Transcribing took %s", str(end - start))
@@ -200,11 +200,7 @@ if __name__ == "__main__":
     parser.add_argument("--srt", action="store_true", help="if set the audios will be transcibed to srt")
 
     # PDF options
-    pdf_options = parser.add_mutually_exclusive_group()
-    pdf_options.add_argument("--pdf", action="store_true", help="if set the audios will be transcibed to pdfs with page numbers")
-    pdf_options.add_argument(
-        "--pdf-no-num", action="store_true", help="if set the audios will be transcibed to pdfs without page numbers"
-    )
+    parser.add_argument("--pdf", action="store_true", help="if set the audios will be transcibed to pdfs with page numbers")
 
     # Output options
     parser.add_argument(
