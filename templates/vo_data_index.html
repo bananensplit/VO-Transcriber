@@ -1,99 +1,87 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="UTF-8" />
+        <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
 
-<head>
-    <meta charset="UTF-8">
-    <style>
-        * {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+            body {
+                padding: 20px;
+            }
 
-        body {
-            padding: 20px;
-        }
+            .vo_titel {
+                color: navy;
+            }
 
-        .vo_titel {
-            color: navy;
-        }
+            .info_element {
+                width: 50%;
+                padding: 20px 10px 0 10px;
+            }
 
-        .info_element {
-            width: 50%;
-            padding: 20px 10px 0 10px;
-        }
+            .info_element > *:first-child {
+                font-weight: bolder;
+            }
 
-        .info_element>*:first-child {
-            font-weight: bolder;
-        }
+            .transcription {
+                margin-top: 40px;
+            }
 
-        .transcription {
-            margin-top: 40px;
-        }
+            .transcription > p {
+                font-size: 1.05em;
+                line-height: 1.8;
+            }
+        </style>
+    </head>
 
-        .transcription>p {
-            font-size: 1.05em;
-            line-height: 1.8;
-        }
+    <body>
+        <h1 class="vo_titel">{{vo_titel}}</h1>
 
-        footer {
-            margin-top: 20px;
-        }
-    </style>
-</head>
+        <table class="vo_metadata">
+            <tr>
+                <td class="info_element">
+                    <div>VO-Titel</div>
+                    <div>{{vo_titel}}</div>
+                </td>
+                <td class="info_element">
+                    <div>Länge (der Aufnahme)</div>
+                    <div>{{length}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="info_element">
+                    <div>Autor</div>
+                    <div>{{autor}}</div>
+                </td>
+                <td class="info_element">
+                    <div>Aufgenommen am</div>
+                    <div>{{recorded_on}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="info_element">
+                    <div>Beitragende</div>
+                    <div>{{beitragende}}</div>
+                </td>
+                <td class="info_element">
+                    <div>Serie</div>
+                    <div>{{series_name}}</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="info_element">
+                    <div>Link to raw video</div>
+                    <div><a href="{{link}}">MP4 Stream file</a></div>
+                </td>
+            </tr>
+        </table>
 
-<body>
-    <h1 class="vo_titel">{{vo_titel}}</h1>
-
-    <table class="vo_metadata">
-        <tr>
-            <td class="info_element">
-                <div>VO-Titel</div>
-                <div>{{vo_titel}}</div>
-            </td>
-            <td class="info_element">
-                <div>Länge (der Aufnahme)</div>
-                <div>{{length}}</div>
-            </td>
-        </tr>
-        <tr>
-            <td class="info_element">
-                <div>Autor</div>
-                <div>{{autor}}</div>
-            </td>
-            <td class="info_element">
-                <div>Aufgenommen am</div>
-                <div>{{recorded_on}}</div>
-            </td>
-        </tr>
-        <tr>
-            <td class="info_element">
-                <div>Beitragende</div>
-                <div>{{beitragende}}</div>
-            </td>
-            <td class="info_element">
-                <div>Serie</div>
-                <div>{{series_name}}</div>
-            </td>
-        </tr>
-        <tr>
-            <td class="info_element">
-                <div>Link to raw video </div>
-                <div><a href="{{link}}">MP4 Stream file</a></div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="transcription">
-        <b>Transcription</b>
-        <p>{{transcription}}
-            This PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriendThis PDF was made possible by a heavy working boyfriend
-        </p>
-    </div>
-
-    <footer>
-        This PDF was made possible by a heavy working boyfriend &lt;3!
-    </footer>
-</body>
-
+        <div class="transcription">
+            <b>Transcription</b>
+            <p>{{transcription}}</p>
+        </div>
+    </body>
 </html>
