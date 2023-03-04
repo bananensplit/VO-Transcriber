@@ -140,7 +140,7 @@ def main(args):
     if not os.path.isdir(transcription_output_folder):
         os.mkdir(transcription_output_folder)
 
-    for vo_data, audio_path in zip(all_vo_data, paths_to_audios):
+    for vo_data, audio_path in zip(vos_to_transcribe, paths_to_audios):
         start = datetime.now()
         generate_transcribtions_vo(
             audio_path=audio_path,

@@ -12,7 +12,7 @@ def generate_txt(segments, output_file=None):
     if output_file:
         with open(output_file, "w", encoding="UTF-8") as f:
             f.write(out)
-            logger.info("Generated output TXT %s" + output_file)
+            logger.info("Generated output TXT %s", output_file)
 
     logger.debug("Finished generating TXT")
     return out
