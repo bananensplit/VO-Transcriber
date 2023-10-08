@@ -107,6 +107,10 @@ def main(args):
 
     logger.debug("All Vos found: \n%s", "\n".join([20 * " " + vo.vo_title for vo in all_vo_data]))
 
+    for vo in all_vo_data:
+        temp = [f'{35 * " "}{k}: {v}'  for k, v in zip(vo.dict().keys(), vo.dict().values())]
+        logger.info("VO-Data for '%s':\n%s", vo.vo_title, "\n".join(temp))
+
     # Getting VOs to transcribe
     if args.vos is None or len(args.vos) == 0:
         logger.error("No VOs to transcribe given! Exiting")

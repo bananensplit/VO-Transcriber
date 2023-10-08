@@ -50,6 +50,9 @@ def parse_vo_data_tu(data) -> list[VoData]:
     erg = []
 
     for vo in data:
+        print()
+        print()
+        print(vo["mediapackage"]["title"])
         vo_mp4_link = None
         if isinstance(vo["mediapackage"]["media"]["track"], list):
             mp4_tracks = [track for track in vo["mediapackage"]["media"]["track"] if track["mimetype"].startswith("video/mp4")]
@@ -61,14 +64,20 @@ def parse_vo_data_tu(data) -> list[VoData]:
         vo_mp3_link = None
         if isinstance(vo["mediapackage"]["media"]["track"], list):
             mp3_tracks = [track for track in vo["mediapackage"]["media"]["track"] if track["mimetype"].startswith("audio/mpeg")]
-            mp3_track_high_res = max(mp3_tracks, key=lambda x: int(x["audio"]["bitrate"]))
-            vo_mp3_link = mp3_track_high_res["url"]
+            if len(mp3_tracks) > 0:
+                mp3_track_high_res = max(mp3_tracks, key=lambda x: int(x["audio"]["bitrate"]))
+                vo_mp3_link = mp3_track_high_res["url"]
+        
+        contributors = "-"
+        if isinstance(vo["mediapackage"]["creators"]["creator"], list):
+            contributors = ", ".join(vo["mediapackage"]["creators"]["creator"])
 
         erg.append(VoData(
             vo_mp4_link=vo_mp4_link,
             vo_mp3_link=vo_mp3_link,
             vo_title=vo["mediapackage"]["title"],
-            author=vo["mediapackage"]["creators"]["creator"],
+            author=vo["dcCreator"],
+            contributors=contributors,
             series_title=vo["mediapackage"]["seriestitle"],
             duration=timedelta(milliseconds=int(vo["mediapackage"]["duration"])),
             recorded_on=datetime.strptime(vo["dcCreated"], "%Y-%m-%dT%H:%M:%S%z")
